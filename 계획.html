@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 계획서</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; line-height: 1.6; color: #333; max-width: 900px; margin: auto; }
+        h1, h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .section { margin-bottom: 40px; }
+        .tech-stack { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tech-item { background: #ecf0f1; padding: 10px 15px; border-radius: 5px; border: 1px solid #bdc3c7; }
+        .design-sample { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .design-sample h3 { margin-top: 0; }
+        pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>📋 프로젝트 계획서: Simple Board Prototype</h1>
+
+    <div class="section">
+        <h2>1. 기술 스택</h2>
+        <div class="tech-stack">
+            <div class="tech-item"><strong>HTML/CSS</strong>: 기본 웹 구조 및 스타일링</div>
+            <div class="tech-item"><strong>TypeScript</strong>: 안정성을 높인 JavaScript 슈퍼셋</div>
+            <div class="tech-item"><strong>Node.js (Express)</strong>: 백엔드 서버 런타임 및 프레임워크</div>
+            <div class="tech-item"><strong>Neon (PostgreSQL)</strong>: 서버리스 관계형 DB 서비스</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. 시각적 디자인 샘플 (5개)</h2>
+        <div class="design-sample">
+            <h3>1. 미니멀 화이트 (Minimal White)</h3>
+            <p>흰색 배경과 연한 회색 테두리, 높은 여백을 활용한 극도로 깔끔한 디자인.</p>
+        </div>
+        <div class="design-sample">
+            <h3>2. 다크 모던 (Dark Modern)</h3>
+            <p>어두운 네이비/그레이 배경에 밝은 텍스트, 현대적인 느낌의 세련된 디자인.</p>
+        </div>
+        <div class="design-sample">
+            <h3>3. 클래식 포럼 (Classic Forum)</h3>
+            <p>정갈한 표 형식의 목록과 전통적인 웹 게시판 느낌의 디자인.</p>
+        </div>
+        <div class="design-sample">
+            <h3>4. 소프트 블루 (Soft Blue)</h3>
+            <p>파스텔 톤의 파란색을 메인으로 사용하여 눈이 편안하고 친근한 디자인.</p>
+        </div>
+        <div class="design-sample">
+            <h3>5. 네이처 그린 (Nature Green)</h3>
+            <p>초록색 포인트 컬러와 부드러운 곡선을 강조한 생동감 있는 디자인.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. 데이터베이스 설계 (ERD 및 Create 문)</h2>
+        <h3>테이블 목록</h3>
+        <table>
+            <tr><th>테이블명</th><th>설명</th></tr>
+            <tr><td>users</td><td>회원 정보 (아이디, 비밀번호 등)</td></tr>
+            <tr><td>posts</td><td>게시글 정보 (제목, 내용, 작성자, 작성일)</td></tr>
+            <tr><td>comments</td><td>댓글 정보 (내용, 작성자, 게시글 연결)</td></tr>
+            <tr><td>likes</td><td>추천 정보 (계정당 1회 제한용)</td></tr>
+        </table>
+
+        <h3>전체 Create 문</h3>
+        <pre>
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    title VARCHAR(200) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE likes (
+    id SERIAL PRIMARY KEY,
+    post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(id),
+    UNIQUE(post_id, user_id)
+);
+        </pre>
+    </div>
+</body>
+</html>
